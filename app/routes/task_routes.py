@@ -1,40 +1,30 @@
-import fastapi import APIRouter, HTTPException
+# app/routes/task_routes.py
+from fastapi import APIRouter, HTTPException
 from app.models.task_models import Task
-from app.database import connections
-from app.controllers import task_controller
+from app.controllers import task_controllers
 
 router = APIRouter()
 
 @router.post("/tasks")
-async def create_task(task: Task):
+def create_task(task: Task):
     try:
-        result = task_controller.create_task(task)
-        return {"message": "Task created successfully", "task": result}
+        result = task_controllers.create_task(task)
+        return {"message": "Task created successfully", "task_id": str(result)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
-
 @router.get("/tasks")
-async def get_tasks():
+def get_tasks():
     try:
-        tasks = task_controller.get_tasks()
+        tasks = task_controllers.get_tasks()
         return {"tasks": tasks}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
-
 @router.delete("/tasks/{task_id}")
-async def delete_task(task_id: str):
+def delete_task(task_id: str):
     try:
-        task_controller.delete_task(task_id)
+        task_controllers.delete_task(task_id)
         return {"message": "Task deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-# @router.put("/tasks/{task_id}")
-# async def update_task(task_id: str, task: Task):
-#     try:
-#         task_controller.update_task(task_id, task)
-#         return {"message": "Task updated successfully", "task": task}

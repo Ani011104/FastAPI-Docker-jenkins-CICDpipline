@@ -5,4 +5,4 @@ class Task(BaseModel):
     title: str
     description: Optional[str] = None
     completed: bool = False
-    
+
