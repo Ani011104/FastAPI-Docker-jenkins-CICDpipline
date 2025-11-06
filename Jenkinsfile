@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout Code') {
             steps {
-                git 'https://github.com/Ani011104/FastAPI-Docker-jenkins-CICDpipline.git'
+                git branch: 'main' , url: 'https://github.com/Ani011104/FastAPI-Docker-jenkins-CICDpipline.git'
             }
         }
 
