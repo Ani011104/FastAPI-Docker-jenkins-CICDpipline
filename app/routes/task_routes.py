@@ -17,6 +17,8 @@ def create_task(task: Task):
 def get_tasks():
     try:
         tasks = task_controllers.get_tasks()
+        if not tasks:
+            raise HTTPException(status_code=404, detail="No tasks found")
         return {"tasks": tasks}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

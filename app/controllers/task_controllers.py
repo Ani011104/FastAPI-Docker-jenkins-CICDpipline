@@ -1,9 +1,9 @@
 # app/controllers/task_controller.py
 from app.models.task_models import Task
-from app.database.connections import collection
 from bson import ObjectId
 
 def create_task(task: Task):
+    from app.database.connections import collection  # Move import here
     try:
         result = collection.insert_one(task.model_dump())
         return str(result.inserted_id)
@@ -11,6 +11,7 @@ def create_task(task: Task):
         raise Exception(f"Error creating task: {e}")
 
 def get_tasks():
+    from app.database.connections import collection  # Move import here
     try:
         tasks = []
         for task in collection.find():
@@ -21,6 +22,7 @@ def get_tasks():
         raise Exception(f"Error getting tasks: {e}")
 
 def delete_task(task_id: str):
+    from app.database.connections import collection  # Move import here
     try:
         collection.delete_one({"_id": ObjectId(task_id)})
     except Exception as e:
