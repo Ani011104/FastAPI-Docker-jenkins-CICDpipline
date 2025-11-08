@@ -1,0 +1,31 @@
+1) for our setup , we are running jenkins as a container in docker 
+ - in order to build and run containers the jenkins has to have connection or communicate with docker engine 
+ - since this container cant speak with the docker container directly we use 
+ - alpine/socat container to forward traffic from Jenkins to Docker Desktop on Host Machine
+ 
+ this is achieved using the following command
+ 
+ - docker run -d --restart=always -p 127.0.0.1:2376:2375 --network jenkins -v /var/run/docker.sock:/var/run/docker.sock alpine/socat tcp-listen:2375,fork,reuseaddr unix-connect:/var/	run/docker.sock
+ 
+ -docker inspect <container_id> | grep IPAddress
+ 
+ from this we copy the ip address and paste in the docker host url
+ 
+ 
+ - IMPORTANT 
+
+1) had to delete the older version or the one i was using and create a new jenkins in docker 
+2) reason was old verison was trying to talk to docker using tcp which was not working and a decrepatted thing i believe
+3) intalled and mounted socket where docker can listen 
+4) 
+# Step 1: Get container name
+docker ps
+
+# Step 2-4: Install Docker and restart
+docker exec -u root -it jenkins bash -c "apt-get update && apt-get install -y docker.io && usermod -aG docker jenkins"
+
+docker restart jenkins
+
+docker exec -u root -it jenkins chmod 666 /var/run/docker.sock
+
+this fixed and helped me run the pipline 
